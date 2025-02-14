@@ -61,7 +61,7 @@ def clone_repositories(repositories: list):
   print("Cloning repositories...")
   for repo in repositories:
     repo_addr = f"git@github.com:{repo}.git"
-    os.system(f"!git clone {repo_addr}")
+    os.system(f"git clone {repo_addr}")
 
 
 def add_repositories_to_path(repositories: list):
