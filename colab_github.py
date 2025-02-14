@@ -60,11 +60,13 @@ def validate_repositories(repositories: list):
 def clone_repositories(repositories: list):
   print("Cloning repositories...")
   for repo in repositories:
+    print(f"Cloning {repo}...")
     repo_addr = f"git@github.com:{repo}.git"
     os.system(f"git clone {repo_addr}")
 
 
 def add_repositories_to_path(repositories: list):
+  print("Add repositories to path...")
   for repo in repositories:
     github_user, repo_name = repo.split("/")
     sys.path.insert(0, f'/content/{repo_name}')
