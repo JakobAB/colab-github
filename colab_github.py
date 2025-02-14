@@ -1,7 +1,6 @@
 import os
 import sys
 from google.colab import drive
-import subprocess
 
 def github_auth(persistent_key: bool):
   """
@@ -59,13 +58,10 @@ def validate_repositories(repositories: list):
 
 
 def clone_repositories(repositories: list):
-  print("Cloning repositories...")
   for repo in repositories:
     print(f"Cloning {repo}...")
     repo_addr = f"git@github.com:{repo}.git"
-    command = f"git clone {repo_addr}"
-    result = subprocess.check_output(command, shell=True, text=True)
-    print(result)
+    os.system(f"git clone {repo_addr}")
 
 
 def add_repositories_to_path(repositories: list):
