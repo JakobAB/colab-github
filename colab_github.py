@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 from google.colab import drive
 
 def github_auth(persistent_key: bool):
@@ -60,7 +61,9 @@ def clone_repositories(repositories: list):
   for repo in repositories:
     print(f"Cloning {repo}...")
     repo_addr = f"git@github.com:{repo}.git" # use SSH method to clone repo
-    os.system(f"git clone {repo_addr}")
+    cmd = f"git clone {repo_addr}"
+    result = subprocess.check_output(cmd, shell=True)
+    print(result)
 
 
 def add_repositories_to_path(repositories: list):
