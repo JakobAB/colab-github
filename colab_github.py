@@ -1,3 +1,7 @@
+import os
+import sys
+from google.colab import drive
+
 def github_auth(persistent_key: bool):
   """
   Authenticate with GitHub to access private repo. This function will 
@@ -5,12 +9,10 @@ def github_auth(persistent_key: bool):
   one. 
   - `persistent_key`: Store private key in Google Drive.
   """
-  import os
-
+  
   os.system("mkdir -p ~/.ssh")
 
   if persistent_key:
-    from google.colab import drive
     drive.mount('/content/drive/')
     private_key_dir = "/content/drive/MyDrive/.colab-github"
     os.system(f"mkdir -p {private_key_dir}")
@@ -37,9 +39,8 @@ def github_auth(persistent_key: bool):
     if fresh_key:
       print("Please go to https://github.com/settings/ssh/new to upload the following key: ")
     else:
-      print("Looks that a private key is already created. If you have already push it to github, no action required."
-      "\n Otherwise, Please go to https://github.com/settings/ssh/new to upload the following key: ")
-
+      print("Looks like a private key was already created. If you already entered it into github, no action is required."
+      "\n Otherwise, Please go to https://github.com/settings/ssh/new and upload the following key: ")
     print(public_key)
 
   # add github to known hosts (you may hardcode it to prevent MITM attacks)
@@ -48,3 +49,29 @@ def github_auth(persistent_key: bool):
   os.system("chmod go-rwx ~/.ssh/id_ed25519")
 
   print("Please use SSH method to clone repo.")
+
+
+def validate_repositories(repositories: list):
+  assert isinstance(repositories, list), f"repositories has to be a list, not {type(repositories)=}"
+  for repo in repositories:
+    assert isinstance(repo, str), f"repository list elements have to be strings, not {type(repo)=}"
+
+
+def clone_repositories(repositories: list):
+  print("Cloning repositories...")
+  for repo in repositories:
+    repo_addr = f"git@github.com:{repo}.git"
+    os.system(f"!git clone {repo_addr}")
+
+
+def add_repositories_to_path(repositories: list):
+  for repo in repositories:
+    github_user, repo_name = repo.split("/")
+    sys.path.insert(0, f'/content/{repo_name}')
+
+
+def setup(repositories):
+  github_auth(persistent_key=True)
+  validate_repositories(repositories)
+  clone_repositories(repositories)
+  add_repositories_to_path(repositories)
