@@ -38,6 +38,7 @@ def github_auth(persistent_key: bool):
     public_key = f.read()
     if fresh_key:
       print("Please go to https://github.com/settings/ssh/new to upload the following key: ")
+      print("After adding the key to github, please re-execute this code!")
     else:
       print("Looks like a private key was already created. If you already entered it into github, no action is required."
       "\n Otherwise, Please go to https://github.com/settings/ssh/new and upload the following key: ")
@@ -47,8 +48,6 @@ def github_auth(persistent_key: bool):
   os.system("ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts")
 
   os.system("chmod go-rwx ~/.ssh/id_ed25519")
-
-  print("Please use SSH method to clone repo.")
 
 
 def validate_repositories(repositories: list):
@@ -60,7 +59,7 @@ def validate_repositories(repositories: list):
 def clone_repositories(repositories: list):
   for repo in repositories:
     print(f"Cloning {repo}...")
-    repo_addr = f"git@github.com:{repo}.git"
+    repo_addr = f"git@github.com:{repo}.git" # use SSH method to clone repo
     os.system(f"git clone {repo_addr}")
 
 
@@ -76,3 +75,4 @@ def setup(repositories):
   validate_repositories(repositories)
   clone_repositories(repositories)
   add_repositories_to_path(repositories)
+  print("Finished setup!")
