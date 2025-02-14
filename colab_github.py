@@ -62,7 +62,7 @@ def clone_repositories(repositories: list):
     print(f"Cloning {repo}...")
     repo_addr = f"git@github.com:{repo}.git" # use SSH method to clone repo
     cmd = f"git clone {repo_addr}"
-    result = subprocess.check_output(cmd, shell=True)
+    result = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
     print(result)
 
 
